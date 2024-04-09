@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Gandhi Alexis Sinhue Contreras Torres
+"""
+# =============================================================================
+# Librerías
+# =============================================================================
+import seaborn as sns
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+#matplotlib.style.use('seaborn-whitegrid')
+sns.set_style('whitegrid')
+# ============================================================================
+# Parámetros de Entrada
+# =============================================================================
+"Inserte Altitud Precisa para obtener Temperatura, Presión y Densidad del Aire"
+altitud_precisa = 2431
+"Inserte Rando de Altitudes para gráficas de Temperatura, Presión y Densidad del Aire"
+altitud_min = 0
+altitud_max = 11000 
+# =============================================================================
+# Algoritmo ISA
+# =============================================================================
+class ISA:
+    "ISA in Troposphere"
+    def __init__(self,z):   
+        "fixed parameters in sea level"
+        self.pressure_0 = 101325 #Pa
+        self.density_0 = 1.225 #kg/m^3
+        self.gravity = 9.81 #m/s^2
+        self.R = 287 # m^2/(s^2 K)
+        self.T_0 = 15 # Celsius
+        self.lambd = -6.5E-3
+        self.T_0k = self.T_0 + 273.15 # Kelvin
+        "Define altitude in meters"
+        self.z = z
+        "ISA functions"
+        self.Temperature = self.T_0 - z*(1/1000)*6.5
+        self.Pressure = self.pressure_0*(1 + ((self.lambd*z)/self.T_0k))**((-self.gravity/(self.R*self.lambd)))
+        self.Density = self.density_0*(1 + ((self.lambd*z)/self.T_0k))**((-self.gravity/(self.R*self.lambd))-1)
+        "Unit Systems"
+        self.Temperature_ES = self.Temperature + 273.15
+        self.Pressure_ES = self.Pressure *0.0001450377
+        self.Density_ES = self.Density*0.0019403203259304
+# =============================================================================
+# Salidas
+# =============================================================================
+print("---Propiedades del aire a una altitud de:", altitud_precisa, "m ---")
+print("Temperatura:","{0:.2f}".format(ISA(altitud_precisa).Temperature),"°C |","{0:.2f}".format(ISA(altitud_precisa).Temperature_ES),"K" )
+print("Presión:", "{0:.2f}".format(ISA(altitud_precisa).Pressure),"Pa")
+print("Densidad:","{0:.4f}".format(ISA(altitud_precisa).Density), "kg/m3")
+
+z = np.linspace(altitud_min, altitud_max)
+fig, Temp = plt.subplots(2,1)
+Temp[0].plot(z, ISA(z).Temperature, label="Celsius")
+Temp[1].plot(z, ISA(z).Temperature_ES,color="green", label="Kelvin")
+Temp[0].set_title("Temperatura")
+Temp[0].legend(loc="best")
+Temp[1].legend(loc="best")
+Temp[1].set_xlabel("Altitud (m)")
+
+fig, Press = plt.subplots(2,1)
+Press[0].plot(z, ISA(z).Pressure, label="Pa")
+Press[1].plot(z, ISA(z).Pressure_ES,color="green", label="PSI")
+Press[0].set_title("Presión")
+Press[0].legend(loc="best")
+Press[1].legend(loc="best")
+Press[1].set_xlabel("Altitud (m)")
+
+fig, Den = plt.subplots(2,1)
+Den[0].plot(z, ISA(z).Density, label="kg/m3")
+Den[1].plot(z, ISA(z).Density_ES,color="green", label="slug/ft3")
+Den[0].set_title("Densidad")
+Den[0].legend(loc="best")
+Den[1].legend(loc="best")
+Den[1].set_xlabel("Altitud (m)")
+
