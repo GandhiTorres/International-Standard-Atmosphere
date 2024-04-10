@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @author: Gandhi Alexis Sinhue Contreras Torres
 """
@@ -14,6 +13,7 @@ sns.set_style('whitegrid')
 # ============================================================================
 # Parámetros de Entrada
 # =============================================================================
+
 "Inserte Altitud Precisa para obtener Temperatura, Presión y Densidad del Aire"
 altitud_precisa = 2431
 "Inserte Rando de Altitudes para gráficas de Temperatura, Presión y Densidad del Aire"
@@ -48,8 +48,8 @@ class ISA:
 # =============================================================================
 print("---Propiedades del aire a una altitud de:", altitud_precisa, "m ---")
 print("Temperatura:","{0:.2f}".format(ISA(altitud_precisa).Temperature),"°C |","{0:.2f}".format(ISA(altitud_precisa).Temperature_ES),"K" )
-print("Presión:", "{0:.2f}".format(ISA(altitud_precisa).Pressure),"Pa")
-print("Densidad:","{0:.4f}".format(ISA(altitud_precisa).Density), "kg/m3")
+print("Presión:", "{0:.2f}".format(ISA(altitud_precisa).Pressure),"Pa |", "{0:.2f}".format(ISA(altitud_precisa).Pressure_ES),"PSI")
+print("Densidad:","{0:.4f}".format(ISA(altitud_precisa).Density), "kg/m3 |", "{0:.4f}".format(ISA(altitud_precisa).Density_ES), "slug/ft3")
 
 z = np.linspace(altitud_min, altitud_max)
 fig, Temp = plt.subplots(2,1)
